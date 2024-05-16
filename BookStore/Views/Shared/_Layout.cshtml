@@ -3,7 +3,9 @@
     var cart = new Cart(Context);
 
     var current = ViewContext.RouteData.Values["area"]?.ToString() ??
-    ViewContext.RouteData.Values["controller"]!.ToString() ?? "";
+    ViewContext.RouteData.Values["controller"]!.ToString()!;
+
+    var action = ViewContext.RouteData.Values["action"]?.ToString()!;
 }
 
 <!DOCTYPE html>
@@ -17,6 +19,10 @@
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
           crossorigin="anonymous">
     <link href="~/css/site.css" rel="stylesheet" />
+
+    <!-- SweetAlert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/js/site.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     @RenderSection("scripts", false)
@@ -58,16 +64,62 @@
                             <span class="badge bg-light text-dark">@cart.Count</span>
                         </a>
                     </li>
-                    <!-- This link has not been implemented yet -->
-                    <li class="nav-item">
-                        <a class="nav-link @Nav.Active("Register", current)"
-                           asp-action="Register" asp-controller="Home" asp-area="">
-                            <span class="fas fa-edit"></span>&nbsp;Register
-                        </a>
-                    </li>
+                    @using Microsoft.AspNetCore.Identity
+                    @inject SignInManager<User> signInManager
+                    @if(signInManager.IsSignedIn(User))
+                    {
+
+                       <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle show" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
+                                @User.Identity.Name
+                            </a>
+                            <div class="dropdown-menu show" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 42px);" data-popper-placement="bottom-start">
+                                <h6 class="dropdown-header">Dropdown header</h6>
+                                <a asp-action="nav-link @Nav.Active("ChangePassword",action)"><span class="fas fa-edit"></span>
+                                    &nbsp, Change Password
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <form method="post" asp-action="LogOut" asp-controller="Account">
+
+                                    <span class="text-light">@User.Identity?.Name</span>
+                                </form>
+                       </li>
+
+
+
+
+                       @*  <li class="nav-item">
+                            <a asp-action="nav-link @Nav.Active("ChangePassword",action)"
+                                asp-action="ChangePassword" asp-controller="Account" asp-area="">
+                                <span class="fas fa-edit"></span>&nbsp, Change Password
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <form method="post" asp-action="LogOut" asp-controller="Account" >
+
+                                    <span class="text-light">@User.Identity?.Name</span>
+                            </form>
+                        </li> *@
+                    }
+                    else
+                    {
+                        // anonymous user - Register link and Log In button
+                        <li class="nav-item">
+                            <a class="nav-link @Nav.Active("Register", action)"
+                               asp-action="Register" asp-controller="Account" asp-area="">
+                                <span class="fas fa-edit"></span>&nbsp;Register
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Login" asp-controller="Account"
+                               asp-area="" class="btn btn-outline-light">Log In</a>
+                        </li>
+                    }
+
+                    
                     <li class="nav-item">
                         <a class="nav-link @Nav.Active("Admin", current)"
-                           asp-action="Index" asp-controller="Author" asp-area="Admin">
+                           asp-action="Index" asp-controller="Book" asp-area="Admin">
                             <span class="fas fa-cog"></span>&nbsp;Admin
                         </a>
                     </li>
@@ -83,17 +135,29 @@
     </header>
     <div class="container bg-light">
         <main>
-           @*  @if (TempData.Keys.Contains("message"))
-            {
-                <h4 class="bg-info text-center text-white p-2">@TempData["message"]</h4>
-            } *@
             @if (TempData.Keys.Contains("message"))
             {
-                <div id="alertMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-                    <h4 class="text-center text-white p-2">@TempData["message"]</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+                    <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+                        <div class="toast-header">
+                            <strong class="mr-auto">  @TempData["message"]</strong>
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
+                <script>
+                    // Activate toast
+                    var myToast = document.getElementById('myToast');
+                    var toast = new bootstrap.Toast(myToast);
+                    toast.show();
+                </script>
             }
+
+           
+
             @RenderBody()
         </main>
     </div>
