@@ -39,8 +39,19 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
+
+
+var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+using (var scope = scopeFactory.CreateScope())
+{
+    await ConfigureIdentity.CreateAdminUserAsync(scope.ServiceProvider);
+}
+
+
+app.UseSession();
+
 
 app.MapAreaControllerRoute(
     name: "admin",
