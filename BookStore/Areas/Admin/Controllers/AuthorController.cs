@@ -1,8 +1,11 @@
 ﻿using BookStore.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Areas.Admin.Controllers
 {
+    [Authorize(Roles="Admin")]
     [Area("Admin")]
     public class AuthorController : Controller
     {

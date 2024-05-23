@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookStore.Models
 {
@@ -6,6 +7,7 @@ namespace BookStore.Models
     {
         [Required(ErrorMessage = "Please enter username")]
         [StringLength(25)]
+        //[Remote("Check","Account", ErrorMessage = "Username already taken")]
         public string Username { get; set; } = string.Empty;
 
         [Required(ErrorMessage="Please enter a password." )]

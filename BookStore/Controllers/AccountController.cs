@@ -41,13 +41,8 @@ namespace BookStore.Controllers
             }
             return View(model);
         }
-        
-        [HttpPost]
-        public async Task<IActionResult> LogOut()
-        {
-            await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
+
+   
 
         [HttpGet]
         public IActionResult LogIn(string returnUrl = "")
@@ -69,11 +64,18 @@ namespace BookStore.Controllers
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return RedirectToAction(model.ReturnUrl);
                     else
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Book");
                 }
             }
             ModelState.AddModelError("", "Invalid username/password.");
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogOut()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
         public ViewResult AccessDenied()
@@ -81,7 +83,37 @@ namespace BookStore.Controllers
             return View();
         }
 
-        
-
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            var model = new ChangePasswordViewModel()
+            {
+                UserName = User.Identity?.Name ??  ""
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                User user = await userManager.FindByNameAsync(model.UserName);
+                var result = await userManager.ChangePasswordAsync(user,
+                    model.OldPassword, model.NewPassword);
+                if (result.Succeeded)
+                {
+                    TempData["message"] = "Password changed successfully";
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    foreach (IdentityError error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+            }
+            return View(model);
+        }
     }
 }
