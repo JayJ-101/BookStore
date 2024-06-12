@@ -18,7 +18,7 @@
         }
         @foreach (User user in Model.Users)
         {
-            <tr>
+            <tr class ="table-light">
                 <td>@user.UserName</td>
                 <td>
                     @foreach(string roleName in user.RoleName)
@@ -73,7 +73,7 @@ else
         <tbody>
             @foreach(var role in Model.Roles)
             {
-                <tr>
+                <tr class="table-light">
                     <td>@role.Name</td>
                     <td>
                         <form method="post" asp-action="DeleteRole"
