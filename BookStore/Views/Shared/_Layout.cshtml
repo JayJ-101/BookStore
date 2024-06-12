@@ -12,7 +12,7 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tuxedo Books @ViewBag.Title</title>
+    <title>Books Store   @ViewBag.Title</title>
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet"
           href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -112,11 +112,7 @@
         </div>
         
     </nav>
-    <header class="text-center">
-        <a asp-action="Index" asp-controller="Home">
-            <img src="~/images/logo.png" class="img-fluid center-block" />
-        </a>
-    </header>
+    
     <div class="container bg-light">
         <main>
             @if (TempData.Keys.Contains("message"))

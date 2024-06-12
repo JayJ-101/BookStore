@@ -12,7 +12,7 @@
     <li class="list-group-item">
         <form asp-action="select" method="post">
             <div class="row">
-                <h5 class="col-auto mt-1">Select a book</h5>
+                <h5 class="col-auto text-dark">Select a book</h5>
                 <div class="col-auto">
                     <select name="id" class="form-select"
                         asp-items='@new SelectList(Model,"BookId", "Title")'></select>

@@ -64,7 +64,7 @@ namespace BookStore.Controllers
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return RedirectToAction(model.ReturnUrl);
                     else
-                        return RedirectToAction("Index", "Book");
+                        return RedirectToAction("Index", "Home");
                 }
             }
             ModelState.AddModelError("", "Invalid username/password.");
