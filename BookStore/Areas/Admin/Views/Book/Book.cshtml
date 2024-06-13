@@ -7,7 +7,7 @@
 <h1>@action Book</h1>
 
 <form asp-action="@action" asp-area="Admin" method="post">
-    <input typw="hidden" asp-for="Book.BookId" />
+    <input type="hidden" asp-for="Book.BookId" />
     @*if daeleting, only display title but include title in hidden field 
     for delete message. Otherwise, provide a text box *@
     @if(action.EqualsNoCase("delete"))
@@ -50,7 +50,8 @@
             <label class="col-form-label col-md-2">Author(s):</label>
             <div class="col-md-4">
                 <select asp-for="SelectedAuthors" class="form-control"
-                    asp-items='@new MultiSelectList(Model.Authors, "AuthoId","FullName", Model.SelectedAuthors)'></select>
+                    asp-items='@new MultiSelectList(Model.Authors, "AuthorId","FullName", Model.SelectedAuthors)'>
+                </select>
                     (Hold down CTRL or CMD key to select multiple)
             </div>
             <div class="col">
