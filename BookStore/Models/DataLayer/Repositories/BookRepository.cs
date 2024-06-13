@@ -3,7 +3,7 @@
     public class BookRepository : Repository<Book>, IBookRepository
     {
         public BookRepository(BookstoreContext ctx) : base(ctx) { }
-        public void AddUpdateAuthors(Book book, int[] authorids, IRepository<Author> authorData)
+        public void AddNewAuthors(Book book, int[] authorids, IRepository<Author> authorData)
         {
             foreach(Author auth in book.Authors)
             {
