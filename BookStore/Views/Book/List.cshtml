@@ -9,89 +9,89 @@
 
 <h1>Book Catalog</h1>
 
-@* add to cart form *@
-<form asp-action="Add" asp-controller="Cart" method="post">
-    <table class="table table-bordered table-striped table-sm">
-        <thead class="bg-dark text-white">
-            <tr>
-                <th>
-                    @{
-                        routes.SetSortAndDirection(
-        nameof(Book.Title), current);
-                    }
-                    <a asp-action="List"
-                       asp-all-route-data="@routes.ToDictionary()"
-                       class="text-white">Title</a>
-                </th>
-                <th>Author(s)</th>
-                <th>
-                    @{
-                        routes.SetSortAndDirection(
-        nameof(Genre), current);
-                    }
-                    <a asp-action="List"
-                       asp-all-route-data="@routes.ToDictionary()"
-                       class="text-white">Genre</a>
-                </th>
-                <th>
-                    @{
-                        routes.SetSortAndDirection(
-        nameof(Book.Price), current);
-                    }
-                    <a asp-action="List"
-                       asp-all-route-data="@routes.ToDictionary()"
-                       class="text-white text-decoration-none">Price</a>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+<div class="row mb-4">
+    <div class="col-md-6">
+        <form class="d-flex" method="get" asp-action="List" asp-controller="Book">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="SearchTerm" value="">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <form method="get" asp-action="List" asp-controller="Book">
+            <select class="form-select" name="CategoryId" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+               @*  @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.CategoryId" @(current.CategoryId == category.CategoryId ? "selected" : "")>
+                        @category.Name
+                    </option>
+                } *@
+            </select>
+        </form>
+    </div>
+</div>
+
+
+
+<section class="book-list mb-5">
+
+    @* Add to cart form *@
+    <form asp-action="Add" asp-controller="Cart" method="post">
+        <div class="row">
             @foreach (Book book in Model.Books)
             {
-                <tr class="table-light">
-                    <td>
-                        <a asp-action="Details" asp-route-id="@book.BookId"
-                           asp-route-slug="@book.Title.Slug()">
-                            @book.Title
-                        </a>
-                    </td>
-                    <td>
-                        @foreach (var a in book.Authors)
-                        {
-                            <p>
-                                <a asp-action="Details" asp-controller="Author"
-                                   asp-route-id="@a.AuthorId"
-                                   asp-route-slug="@a.FullName.Slug()">
-                                    @a.FullName
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Book Cover">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a asp-action="Details" asp-route-id="@book.BookId"
+                                   asp-route-slug="@book.Title.Slug()">
+                                    @book.Title
                                 </a>
-                            </p>
-                        }
-                    </td>
-                    <td>@book.Genre.Name</td>
-                    <td>@book.Price.ToString("c")</td>
-                    <td>
-                        <button type="submit" name="id" value="@book.BookId"
-                                class="btn btn-primary">
-                            Add To Cart
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</form>
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                @foreach (var a in book.Authors)
+                                {
+                                    <a asp-action="Details" asp-controller="Author"
+                                       asp-route-id="@a.AuthorId"
+                                       asp-route-slug="@a.FullName.Slug()">
+                                        @a.FullName
+                                    </a>
+                                    @if (a != book.Authors.Last())
+                                    {
 
-@* paging links *@
+                                    }
+                                }
+                            </h6>
+                            <p class="card-text">Genre: @book.Genre.Name</p>
+                            <p class="card-text">Price: @book.Price.ToString("c")</p>
+                            <button type="submit" name="id" value="@book.BookId" class="btn btn-primary">
+                                Add To Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </form>
+
+</section>
+
+@* Paging links *@
 @{
-    @* Reset to the current route values. This is necessary to clear the changes made while
-        creating the sorting links above. *@
     routes = current.Clone();
 
-    for (int i = 1; i <= Model.TotalPages; i++)
-    {
-        routes.PageNumber = i;
-        string active = @Nav.Active(i, current.PageNumber);
-        <a asp-action="List" asp-all-route-data="@routes.ToDictionary()"
-           class="btn btn-outline-primary @active">@i</a>
-    }
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                routes.PageNumber = i;
+                string active = @Nav.Active(i, current.PageNumber);
+                <li class="page-item @active">
+                    <a asp-action="List" asp-all-route-data="@routes.ToDictionary()" class="page-link">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
 }

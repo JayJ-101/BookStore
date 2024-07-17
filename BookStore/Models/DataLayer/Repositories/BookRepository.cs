@@ -16,6 +16,11 @@
                 if(author != null) 
                     book.Authors.Add(author);
             }
+
         }
+        //public IEnumerable<Book> GetRandomBooks(int count)
+        //{
+        //    return GetRandomEntities(count);
+        //}
     }
 }

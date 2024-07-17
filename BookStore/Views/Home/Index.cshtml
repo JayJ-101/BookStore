@@ -1,8 +1,77 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<style>
+    
+</style>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1>Welcome to Our Bookstore</h1>
+        <p>Find your next favorite book with us</p>
+        <a asp-action="List" asp-controller="Book"  class="btn btn-primary btn-lg">Browse Books</a>
+    </div>
+</section>
+
+<!-- Main Content -->
+<main class="container my-5">
+    <!-- Featured Books -->
+    <section id="featured" class="featured-books mb-5">
+        <h2 class="text-center mb-4">Featured Books</h2>
+        <div class="row">
+            @foreach (var book in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Book Cover">
+                        <div class="card-body">
+                            <h5 class="card-title">@book.Title</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                @foreach (var author in book.Authors)
+                                {
+                                    @author.FullName
+
+                                    <br />
+                                }
+                            </h6>
+                            <p class="card-text">Genre: @(book.Genre != null ? book.Genre.Name : "N/A")</p>
+                            <p class="card-text">Price: @book.Price.ToString("c")</p>
+                            <p class="card-text">Brief description of the book goes here.</p>
+                            <a href="#" class="btn btn-primary">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories mb-5">
+        <h2 class="text-center mb-4">Categories</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <ul>
+                    <li>Fiction</li>
+                    <li>Non-Fiction</li>
+                    <li>Mystery</li>
+                    <li>Science Fiction</li>
+                    <li>Biography</li>
+                </ul>
+            </div>
+            <div class="col-md-8">
+                <img src="https://via.placeholder.com/700x400" alt="Books" class="img-fluid">
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter text-center mb-5">
+        <h2>Subscribe to our Newsletter</h2>
+        <form class="d-flex justify-content-center mt-3">
+            <input type="email" class="form-control w-50" placeholder="Enter your email">
+            <button type="submit" class="btn btn-primary ms-2">Subscribe</button>
+        </form>
+    </section>
+</main>
+

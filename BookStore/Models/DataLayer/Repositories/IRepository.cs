@@ -2,7 +2,9 @@
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> List(QueryOptions<T> options);   
+        IEnumerable<T> List(QueryOptions<T> options);
+
+       
         int Count { get; }
 
         T? Get(QueryOptions<T> options);

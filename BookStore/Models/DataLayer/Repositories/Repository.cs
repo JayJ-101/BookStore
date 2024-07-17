@@ -2,7 +2,7 @@
 
 namespace BookStore.Models  
 {
-    public class Repository<T> :IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         protected BookstoreContext context { get; set; }
         private DbSet<T> dbset { get; set; }
@@ -17,13 +17,14 @@ namespace BookStore.Models
 
         public virtual IEnumerable<T> List(QueryOptions<T> options) => 
             BuildQuery(options).ToList();
-
+       
+  
 
         public virtual T? Get(int id) => dbset.Find(id);
         public virtual T? Get(string id) =>dbset.Find(id);
         public virtual T? Get(QueryOptions<T> options) =>
             BuildQuery(options).FirstOrDefault();
-
+        
 
         public virtual void Insert(T entity) => dbset.Add(entity);
         public virtual void Update(T entity) => dbset.Update(entity);
@@ -55,6 +56,7 @@ namespace BookStore.Models
             return query;
         }
 
+      
     }
 }
 

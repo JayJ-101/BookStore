@@ -5,7 +5,7 @@ namespace BookStore.Models
     public abstract class GridData
     {
         public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 4;
+        public int PageSize { get; set; } = 6;
         public string SortDirection { get; set; } = "asc";
         public string SortField { get; set; } = string.Empty;
 
